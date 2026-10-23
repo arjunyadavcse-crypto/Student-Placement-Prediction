@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Eligibility Assessment - T&P Portal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Bar */
+        .navbar {
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #f8fafc;
+            text-decoration: none;
+        }
+
+        .nav-brand .logo-icon {
+            background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+            color: #ffffff;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Main Container */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .assessment-card {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(14px);
+            border-radius: 22px;
+            padding: 40px;
+            max-width: 680px;
+            width: 100%;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pill-badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 5px 14px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Error Alert */
+        .alert-error {
+            background: rgba(239, 68, 68, 0.18);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Layout */
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .field-tag {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #64748b;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.65);
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .helper-text {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            line-height: 1.4;
+        }
+
+        /* Benchmark Callout Box */
+        .benchmark-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 10px;
+        }
+
+        .benchmark-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .benchmark-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            text-align: center;
+        }
+
+        .benchmark-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .benchmark-item .val {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #38bdf8;
+        }
+
+        .benchmark-item .desc {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        /* Action Buttons */
+        .action-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .btn-predict {
+            flex: 2;
+            padding: 15px 24px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #ffffff;
+            font-size: 1.02rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.55);
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+        }
+
+        .btn-reset {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-reset:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 14px 18px;
+            }
+            .assessment-card {
+                padding: 25px 20px;
+            }
+            .benchmark-items {
+                grid-template-columns: 1fr;
+            }
+            .action-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <header class="navbar">
+        <a href="{% url 'home' %}" class="nav-brand">
+            <span class="logo-icon">🎓</span>
+            <span>Campus T&P Prediction Portal</span>
+        </a>
+        <div class="nav-user">
+            <span class="user-badge">👤 {{ student_name }}</span>
+            <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+        </div>
+    </header>
+
+    <!-- Main Form Area -->
+    <main class="main-wrapper">
+        <div class="assessment-card">
+            <div class="card-header">
+                <span class="pill-badge">Training & Placement Cell</span>
+                <h1>Student Placement Eligibility Assessment</h1>
+                <p class="subtitle">Enter the candidate's academic standing, campus aptitude score, and technical profile to evaluate placement probability.</p>
+            </div>
+
+            {% if error %}
+            <div class="alert-error">
+                <span>⚠️</span>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <form action="{% url 'result' %}" method="POST" id="predictionForm">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <!-- Academic CGPA -->
+                    <div class="input-group">
+                        <div class="label-row">
+                            <label for="cgpa">
+                                <span>📚</span> Academic CGPA
+                            </label>
+                            <span class="field-tag">Scale 0.00 – 10.00</span>
+                        </div>
+                        <div class="input-box">
+                            <input 
+                                type="number" 
+                                id="cgpa" 
+                                name="cgpa" 
+                                step="0.01" 
+                                min="0" 
+                                max="10" 
+                                placeholder="e.g. 7.65" 
+                                value="{{ cgpa|default:'' }}" 
+                                required
+                            >
+                        </div>
+                        <span class="helper-text">Cumulative aggregate score across all completed semesters (B.Tech / MCA / BE / BCA).</span>
+                    </div>
+
+                    <!-- Campus Aptitude / IQ Test Score -->
+                    <div class="input-group">
+                        <div class="label-row">
+                            <label for="iq">
+                                <span>🧠</span> Aptitude & Logical Reasoning (IQ Score)
+                            </label>
+                            <span class="field-tag">Standard Range: 60 – 140</span>
+                        </div>
+                        <div class="input-box">
+                            <input 
+                                type="number" 
+                                id="iq" 
+                                name="iq" 
+                                step="1" 
+                                min="40" 
+                                max="160" 
+                                placeholder="e.g. 104" 
+                                value="{{ iq|default:'' }}" 
+                                required
+                            >
+                        </div>
+                        <span class="helper-text">Score achieved in campus quantitative aptitude, logical reasoning, and cognitive assessments.</span>
+                    </div>
+
+                    <!-- Technical & Profile Score -->
+                    <div class="input-group">
+                        <div class="label-row">
+                            <label for="profile_score">
+                                <span>💻</span> Technical Profile & Skills Score
+                            </label>
+                            <span class="field-tag">Scale 0 – 100</span>
+                        </div>
+                        <div class="input-box">
+                            <input 
+                                type="number" 
+                                id="profile_score" 
+                                name="profile_score" 
+                                step="1" 
+                                min="0" 
+                                max="100" 
+                                placeholder="e.g. 72" 
+                                value="{{ profile_score|default:'' }}" 
+                                required
+                            >
+                        </div>
+                        <span class="helper-text">Evaluation based on coding proficiency, GitHub projects, internships, hackathons, and certifications.</span>
+                    </div>
+
+                    <!-- Realistic College Benchmark Guide -->
+                    <div class="benchmark-box">
+                        <div class="benchmark-title">
+                            <span>📌</span> Standard Campus Recruitment Benchmarks
+                        </div>
+                        <div class="benchmark-items">
+                            <div class="benchmark-item">
+                                <div class="val">≥ 7.0 CGPA</div>
+                                <div class="desc">Top MNCs & Product Eligibility</div>
+                            </div>
+                            <div class="benchmark-item">
+                                <div class="val">≥ 100 Score</div>
+                                <div class="desc">Aptitude Round Clearance</div>
+                            </div>
+                            <div class="benchmark-item">
+                                <div class="val">≥ 60 Score</div>
+                                <div class="desc">Technical Interview Readiness</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-row">
+                        <button type="submit" class="btn-predict">
+                            <span>🎯</span> Predict Placement Status
+                        </button>
+                        <button type="reset" class="btn-reset" onclick="document.getElementById('predictionForm').reset();">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <p class="footer-note">
+                Placement prediction model trained on historical engineering campus recruitment outcomes.
+            </p>
+        </div>
+    </main>
+</body>
+</html>
